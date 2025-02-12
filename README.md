@@ -49,6 +49,7 @@
 ```
 
 NOTE: The config file creates automaticly when using a menu for the first time ex: !testmenu. It directly updates too so if you change the buttons and info and use !testmenu again it will be changed.
+
 ANOTHER NOTE: When using the API in a plugin you don't need to do anything other than just adding the dll in the project and in the .csproj like this:
 ```csproj
 <Project Sdk="Microsoft.NET.Sdk">
