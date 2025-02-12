@@ -139,7 +139,7 @@ namespace Example
                     IsSubMenu = true, // this is a sub menu
                     PostSelectAction = PostSelectAction.Nothing,
                     TextColor = Color.Blue, // You can use different colors for SubMenus if you want.
-                    ParentMenu = menu,
+                    ParentMenu = menu, // always parent the sub menu to its main menu
                     FontName = "Verdana Bold"
                 };
                 subMenu.AddOption("SubOption 1", (p, option) =>
