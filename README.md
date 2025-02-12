@@ -117,7 +117,7 @@ namespace Example
                 option.Text = $"Vote Option ({voteCount})";
                 p.PrintToChat($"Vote registered! Total votes: {voteCount}");
 
-                MenuAPI.GetActiveMenu(p)?.Display();
+                MenuAPI.GetActiveMenu(p)?.Display(); // with this you can directly change the menu and update vote counts
             });
 
             menu.AddOption("Enabled Option", (p, option) =>
