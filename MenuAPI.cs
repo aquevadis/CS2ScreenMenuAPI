@@ -40,6 +40,7 @@ namespace CS2ScreenMenuAPI
                 ActiveMenus.Remove(player.Handle);
             }
         }
+
         public static void RemoveActiveMenu(CCSPlayerController player)
         {
             if (player == null || !player.IsValid)
@@ -47,6 +48,7 @@ namespace CS2ScreenMenuAPI
 
             ActiveMenus.Remove(player.Handle);
         }
+
         public static IMenuInstance? GetActiveMenu(CCSPlayerController player)
         {
             return player != null && player.IsValid && ActiveMenus.TryGetValue(player.Handle, out var menu) ? menu : null;

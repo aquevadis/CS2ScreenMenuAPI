@@ -4,8 +4,9 @@ using System.Text;
 using System.Reflection;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
-using CS2ScreenMenuAPI.Buttons;
+using CS2ScreenMenuAPI.Enums;
 using CS2ScreenMenuAPI.Config;
+using System.Drawing;
 
 namespace CS2ScreenMenuAPI.Internal
 {
@@ -30,6 +31,8 @@ namespace CS2ScreenMenuAPI.Internal
         private readonly Listeners.OnEntityDeleted _onEntityDeletedDelegate;
         private readonly BasePlugin.GameEventHandler<EventRoundStart> _onRoundStartDelegate;
 
+        private static bool _keyCommandsRegistered = false;
+
         public ScreenMenuInstance(BasePlugin plugin, CCSPlayerController player, ScreenMenu menu)
         {
             _plugin = plugin;
@@ -49,10 +52,32 @@ namespace CS2ScreenMenuAPI.Internal
             _checkTransmitDelegate = new Listeners.CheckTransmit(CheckTransmitListener);
             _onEntityDeletedDelegate = new Listeners.OnEntityDeleted(OnEntityDeleted);
             _onRoundStartDelegate = new BasePlugin.GameEventHandler<EventRoundStart>(OnRoundStart);
-
+            RegisterOnKeyPress();
             RegisterListeners();
         }
 
+        private void RegisterOnKeyPress()
+        {
+            if (!_keyCommandsRegistered)
+            {
+                for (int i = 1; i <= 9; i++)
+                {
+                    int key = i;
+                    _plugin.AddCommand($"css_{key}", "Uses OnKeyPress", (player, info) =>
+                    {
+                        if (player == null || player.IsBot || !player.IsValid)
+                            return;
+
+                        var menu = MenuAPI.GetActiveMenu(player);
+                        if (menu != null)
+                        {
+                            menu.OnKeyPress(player, key);
+                        }
+                    });
+                }
+                _keyCommandsRegistered = true;
+            }
+        }
 
         private void RegisterListeners()
         {
@@ -102,6 +127,12 @@ namespace CS2ScreenMenuAPI.Internal
 
         private void Update()
         {
+            if (_player == null || !_player.IsValid)
+            {
+                Close();
+                return;
+            }
+
             if (MenuAPI.GetActiveMenu(_player) != this)
                 return;
 
@@ -250,12 +281,11 @@ namespace CS2ScreenMenuAPI.Internal
         private void BuildNavigationOptions(StringBuilder builder, int selectable)
         {
             builder.AppendLine("\u200B");
-
             if (CurrentPage == 0)
             {
                 if (_menu.IsSubMenu)
                 {
-                    string prefix = (CurrentSelection == selectable) ? "> " : "  ";
+                    string prefix = (CurrentSelection == selectable + 0) ? "> " : "  ";
                     builder.AppendLine($"{prefix}7. Back");
 
                     if (_menu.MenuOptions.Count > NUM_PER_PAGE)
@@ -264,34 +294,45 @@ namespace CS2ScreenMenuAPI.Internal
                         builder.AppendLine($"{prefix}8. Next");
                     }
 
-                    prefix = (CurrentSelection == selectable + (_menu.MenuOptions.Count > NUM_PER_PAGE ? 2 : 1)) ? "> " : "  ";
-                    builder.AppendLine($"{prefix}9. Close");
+                    if (_menu.HasExitOption)
+                    {
+                        int expectedIndex = selectable + (_menu.MenuOptions.Count > NUM_PER_PAGE ? 2 : 1);
+                        prefix = (CurrentSelection == expectedIndex) ? "> " : "  ";
+                        builder.AppendLine($"{prefix}9. Close");
+                    }
                 }
                 else
                 {
+                    int offset = selectable;
                     if (_menu.MenuOptions.Count > NUM_PER_PAGE)
                     {
-                        string prefix = (CurrentSelection == selectable) ? "> " : "  ";
+                        string prefix = (CurrentSelection == offset) ? "> " : "  ";
                         builder.AppendLine($"{prefix}8. Next");
+                        offset++;
                     }
-
-                    string closePrefix = (CurrentSelection == selectable + (_menu.MenuOptions.Count > NUM_PER_PAGE ? 1 : 0)) ? "> " : "  ";
-                    builder.AppendLine($"{closePrefix}9. Close");
+                    if (_menu.HasExitOption)
+                    {
+                        string prefix = (CurrentSelection == offset) ? "> " : "  ";
+                        builder.AppendLine($"{prefix}9. Close");
+                    }
                 }
             }
             else
             {
-                string prefix = (CurrentSelection == selectable) ? "> " : "  ";
+                string prefix = (CurrentSelection == selectable + 0) ? "> " : "  ";
                 builder.AppendLine($"{prefix}7. Back");
-
+                int offset = selectable + 1;
                 if ((_menu.MenuOptions.Count - CurrentPage * NUM_PER_PAGE) > NUM_PER_PAGE)
                 {
-                    prefix = (CurrentSelection == selectable + 1) ? "> " : "  ";
+                    prefix = (CurrentSelection == offset) ? "> " : "  ";
                     builder.AppendLine($"{prefix}8. Next");
+                    offset++;
                 }
-
-                prefix = (CurrentSelection == selectable + ((_menu.MenuOptions.Count - CurrentPage * NUM_PER_PAGE) > NUM_PER_PAGE ? 2 : 1)) ? "> " : "  ";
-                builder.AppendLine($"{prefix}9. Close");
+                if (_menu.HasExitOption)
+                {
+                    prefix = (CurrentSelection == offset) ? "> " : "  ";
+                    builder.AppendLine($"{prefix}9. Close");
+                }
             }
         }
 
@@ -301,19 +342,33 @@ namespace CS2ScreenMenuAPI.Internal
             int selectable = Math.Min(NUM_PER_PAGE, _menu.MenuOptions.Count - currentOffset);
             int navCount = 0;
 
-            if (_menu.IsSubMenu)
+            if (CurrentPage == 0)
             {
-                navCount = (CurrentPage == 0)
-                    ? (_menu.MenuOptions.Count > NUM_PER_PAGE ? 3 : 2)
-                    : ((_menu.MenuOptions.Count - currentOffset) > NUM_PER_PAGE ? 3 : 2);
+                if (_menu.IsSubMenu)
+                {
+                    navCount = 1; // Back
+                    if (_menu.MenuOptions.Count > NUM_PER_PAGE)
+                        navCount++; // Next exists
+                    if (_menu.HasExitOption)
+                        navCount++; // Close exists
+                }
+                else
+                {
+                    // Non-submenu: no Back.
+                    if (_menu.MenuOptions.Count > NUM_PER_PAGE)
+                        navCount++; // Next exists
+                    if (_menu.HasExitOption)
+                        navCount++; // Close exists
+                }
             }
             else
             {
-                navCount = (CurrentPage == 0)
-                    ? (_menu.MenuOptions.Count > NUM_PER_PAGE ? 2 : 1)
-                    : ((_menu.MenuOptions.Count - currentOffset) > NUM_PER_PAGE ? 3 : 2);
+                navCount = 1; // Back
+                if ((_menu.MenuOptions.Count - currentOffset) > NUM_PER_PAGE)
+                    navCount++; // Next exists
+                if (_menu.HasExitOption)
+                    navCount++; // Close exists
             }
-
             return selectable + navCount;
         }
 
@@ -342,53 +397,81 @@ namespace CS2ScreenMenuAPI.Internal
 
         private void HandleNavigationSelection(int selectable)
         {
-            int currentOffset = CurrentPage * NUM_PER_PAGE;
             int navIndex = CurrentSelection - selectable;
 
             if (CurrentPage == 0)
             {
                 if (_menu.IsSubMenu)
                 {
-                    if (navIndex == 0) // Back
+                    if (navIndex == 0)
                     {
+                        // Back.
                         if (_menu.ParentMenu != null)
                         {
                             Close();
                             MenuAPI.OpenMenu(_plugin, _player, _menu.ParentMenu);
                         }
+                        else
+                        {
+                            Close();
+                        }
                     }
-                    else if (navIndex == 1 && _menu.MenuOptions.Count > NUM_PER_PAGE) // Next
+                    else if (navIndex == 1)
                     {
-                        NextPage();
+                        if (_menu.MenuOptions.Count > NUM_PER_PAGE)
+                        {
+                            NextPage();
+                        }
+                        else if (_menu.HasExitOption)
+                        {
+                            Close();
+                        }
                     }
-                    else // Close
+                    else if (navIndex == 2 && _menu.MenuOptions.Count > NUM_PER_PAGE && _menu.HasExitOption)
                     {
                         Close();
                     }
                 }
                 else
                 {
-                    if (navIndex == 0 && _menu.MenuOptions.Count > NUM_PER_PAGE) // Next
+                    if (_menu.MenuOptions.Count > NUM_PER_PAGE)
                     {
-                        NextPage();
+                        if (navIndex == 0)
+                        {
+                            NextPage();
+                        }
+                        else if (navIndex == 1 && _menu.HasExitOption)
+                        {
+                            Close();
+                        }
                     }
-                    else // Close
+                    else
                     {
-                        Close();
+                        if (_menu.HasExitOption && navIndex == 0)
+                        {
+                            Close();
+                        }
                     }
                 }
             }
             else
             {
-                if (navIndex == 0) // Back
+                if (navIndex == 0)
                 {
                     PrevPage();
                 }
-                else if (navIndex == 1 && (_menu.MenuOptions.Count - currentOffset) > NUM_PER_PAGE) // Next
+                else if (navIndex == 1)
                 {
-                    NextPage();
+                    if ((_menu.MenuOptions.Count - CurrentPage * NUM_PER_PAGE) > NUM_PER_PAGE)
+                    {
+                        NextPage();
+                    }
+                    else if (_menu.HasExitOption)
+                    {
+                        Close();
+                    }
                 }
-                else // Close
+                else if (navIndex == 2 && (_menu.MenuOptions.Count - CurrentPage * NUM_PER_PAGE) > NUM_PER_PAGE && _menu.HasExitOption)
                 {
                     Close();
                 }
@@ -415,10 +498,83 @@ namespace CS2ScreenMenuAPI.Internal
             }
         }
 
+        public void OnKeyPress(CCSPlayerController player, int key)
+        {
+            if (player.Handle != _player.Handle)
+                return;
+
+            if (key == 9)
+            {
+                if (_menu.HasExitOption)
+                    Close();
+                return;
+            }
+
+            if (key == 7)
+            {
+                if (CurrentPage == 0 && _menu.IsSubMenu)
+                {
+                    if (_menu.ParentMenu != null)
+                    {
+                        Close();
+                        MenuAPI.OpenMenu(_plugin, _player, _menu.ParentMenu);
+                    }
+                    else
+                    {
+                        Close();
+                    }
+                    return;
+                }
+                else if (CurrentPage > 0)
+                {
+                    PrevPage();
+                    return;
+                }
+            }
+
+            if (key == 8)
+            {
+                if ((_menu.MenuOptions.Count - (CurrentPage * NUM_PER_PAGE)) > NUM_PER_PAGE)
+                {
+                    NextPage();
+                }
+                return;
+            }
+
+            int desiredValue = key;
+            int optionIndex = (CurrentPage * NUM_PER_PAGE) + desiredValue - 1;
+            if (optionIndex >= 0 && optionIndex < _menu.MenuOptions.Count)
+            {
+                var option = _menu.MenuOptions[optionIndex];
+                if (!option.Disabled)
+                {
+                    option.OnSelect(_player, option);
+                    switch (_menu.PostSelectAction)
+                    {
+                        case PostSelectAction.Close:
+                            Close();
+                            break;
+                        case PostSelectAction.Reset:
+                            Reset();
+                            break;
+                        case PostSelectAction.Nothing:
+                            break;
+                        default:
+                            throw new NotImplementedException("The specified Select Action is not supported!");
+                    }
+                }
+            }
+        }
+
         public void Reset()
         {
             CurrentPage = 0;
             CurrentSelection = 0;
+            int currentOffset = CurrentPage * NUM_PER_PAGE;
+            if (_menu.MenuOptions.Count > currentOffset && _menu.MenuOptions[currentOffset].Disabled)
+            {
+                MoveSelection(1);
+            }
             Display();
         }
 

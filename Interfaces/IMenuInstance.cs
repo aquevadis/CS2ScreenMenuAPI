@@ -9,5 +9,6 @@ namespace CS2ScreenMenuAPI
         void Reset();
         void Close();
         void Display();
+        void OnKeyPress(CCSPlayerController player, int key);
     }
 }

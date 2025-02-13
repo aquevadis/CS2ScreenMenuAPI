@@ -9,6 +9,7 @@ namespace CS2ScreenMenuAPI.Interfaces
         Color TextColor { get; set; }
         string FontName { get; set; }
         bool IsSubMenu { get; set; }
+        bool HasExitOption { get; set; } 
         IScreenMenu? ParentMenu { get; set; }
         void AddOption(string text, Action<CCSPlayerController, IMenuOption> callback, bool disabled);
         void Open(CCSPlayerController player);
