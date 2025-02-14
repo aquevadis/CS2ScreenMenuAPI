@@ -155,6 +155,62 @@ namespace Example
     }
 }
 ```
+```
+using System.Drawing;
+using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Core.Attributes.Registration;
+using CounterStrikeSharp.API.Modules.Commands;
+using CS2ScreenMenuAPI;
+using CS2ScreenMenuAPI.Enums;
+
+namespace Example
+{
+    public class ExampleMenu : BasePlugin
+    {
+        public override string ModuleAuthor => "T3Marius";
+        public override string ModuleName => "TestScrenMenu";
+        public override string ModuleVersion => "1.0";
+
+        private int voteCount = 0;
+
+        public override void Load(bool hotReload)
+        {
+
+        }
+
+        [ConsoleCommand("css_testmenu")]
+        public void OnTestMenu(CCSPlayerController player, CommandInfo info)
+        {
+            if (player == null)
+                return;
+
+            ScreenMenu menu = new ScreenMenu("Only key press menu", this) // Creating the menu
+            {
+                PostSelectAction = PostSelectAction.Nothing,
+                IsSubMenu = false, // this is not a sub menu
+                TextColor = Color.DarkOrange, // if this not set it will be the API default color
+                FontName = "Verdana Bold",
+                MenuType = MenuType.KeyPress,
+            };
+            ScreenMenu menu = new ScreenMenu("Only Scroll menu", this) // Creating the menu
+            {
+                PostSelectAction = PostSelectAction.Nothing,
+                IsSubMenu = false, // this is not a sub menu
+                TextColor = Color.DarkOrange, // if this not set it will be the API default color
+                FontName = "Verdana Bold",
+                MenuType = MenuType.Scrollable,
+            };
+            ScreenMenu menu = new ScreenMenu("Menu with both key press and scrollable", this) // Creating the menu
+            {
+                PostSelectAction = PostSelectAction.Nothing,
+                IsSubMenu = false, // this is not a sub menu
+                TextColor = Color.DarkOrange, // if this not set it will be the API default color
+                FontName = "Verdana Bold",
+                MenuType = MenuType.Both,
+            };
+    }
+}
+```
 ## TODO List
 
 - [ ] Allowing spectators to use the menu
