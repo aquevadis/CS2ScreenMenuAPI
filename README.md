@@ -171,9 +171,6 @@ namespace Example
         public override string ModuleAuthor => "T3Marius";
         public override string ModuleName => "TestScrenMenu";
         public override string ModuleVersion => "1.0";
-
-        private int voteCount = 0;
-
         public override void Load(bool hotReload)
         {
 
