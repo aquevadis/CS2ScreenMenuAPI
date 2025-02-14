@@ -204,7 +204,7 @@ namespace Example
                 IsSubMenu = false, // this is not a sub menu
                 TextColor = Color.DarkOrange, // if this not set it will be the API default color
                 FontName = "Verdana Bold",
-                MenuType = MenuType.Both,
+                MenuType = MenuType.Both, // IF you wanna use both types you don't need to add this since default value is using Both Types.
             };
     }
 }
