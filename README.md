@@ -155,7 +155,8 @@ namespace Example
     }
 }
 ```
-```
+MenuTypes
+```C#
 using System.Drawing;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Core.Attributes.Registration;
