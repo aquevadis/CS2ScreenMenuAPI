@@ -6,4 +6,10 @@
         Close,
         Reset
     }
+    public enum MenuType
+    {
+        Scrollable,
+        KeyPress,
+        Both
+    }
 }

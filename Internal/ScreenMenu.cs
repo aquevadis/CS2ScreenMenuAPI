@@ -13,6 +13,7 @@ namespace CS2ScreenMenuAPI
         public bool HasExitOption { get; set; } = true;
         public ScreenMenu? ParentMenu { get; set; } = null;
         public PostSelectAction PostSelectAction { get; set; } = PostSelectAction.Nothing;
+        public MenuType MenuType { get; set; } = MenuType.Both;
 
         public ScreenMenu(string title, BasePlugin plugin) : base(title)
         {

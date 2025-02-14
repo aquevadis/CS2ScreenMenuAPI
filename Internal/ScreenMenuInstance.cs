@@ -184,38 +184,41 @@ namespace CS2ScreenMenuAPI.Internal
 
         private void HandleButtons(PlayerButtons currentButtons)
         {
-            if (Buttons.Buttons.ButtonMapping.TryGetValue(_config.Buttons.ScrollUpButton, out var scrollUpButton))
+            if (_menu.MenuType != MenuType.KeyPress)
             {
-                if (((_oldButtons & scrollUpButton) == 0) && ((currentButtons & scrollUpButton) != 0))
+                if (Buttons.Buttons.ButtonMapping.TryGetValue(_config.Buttons.ScrollUpButton, out var scrollUpButton))
                 {
-                    MoveSelection(-1);
-                    Display();
-                }
-            }
-
-            if (Buttons.Buttons.ButtonMapping.TryGetValue(_config.Buttons.ScrollDownButton, out var scrollDownButton))
-            {
-                if (((_oldButtons & scrollDownButton) == 0) && ((currentButtons & scrollDownButton) != 0))
-                {
-                    MoveSelection(1);
-                    Display();
-                }
-            }
-
-            if (Buttons.Buttons.ButtonMapping.TryGetValue(_config.Buttons.SelectButton, out var selectButton))
-            {
-                if (((_oldButtons & selectButton) == 0) && ((currentButtons & selectButton) != 0))
-                {
-                    if (!_useHandled)
+                    if (((_oldButtons & scrollUpButton) == 0) && ((currentButtons & scrollUpButton) != 0))
                     {
-                        HandleSelection();
+                        MoveSelection(-1);
                         Display();
-                        _useHandled = true;
                     }
                 }
-                else if ((currentButtons & selectButton) == 0)
+
+                if (Buttons.Buttons.ButtonMapping.TryGetValue(_config.Buttons.ScrollDownButton, out var scrollDownButton))
                 {
-                    _useHandled = false;
+                    if (((_oldButtons & scrollDownButton) == 0) && ((currentButtons & scrollDownButton) != 0))
+                    {
+                        MoveSelection(1);
+                        Display();
+                    }
+                }
+
+                if (Buttons.Buttons.ButtonMapping.TryGetValue(_config.Buttons.SelectButton, out var selectButton))
+                {
+                    if (((_oldButtons & selectButton) == 0) && ((currentButtons & selectButton) != 0))
+                    {
+                        if (!_useHandled)
+                        {
+                            HandleSelection();
+                            Display();
+                            _useHandled = true;
+                        }
+                    }
+                    else if ((currentButtons & selectButton) == 0)
+                    {
+                        _useHandled = false;
+                    }
                 }
             }
         }
@@ -262,9 +265,16 @@ namespace CS2ScreenMenuAPI.Internal
             BuildOptionsList(builder, currentOffset, selectable);
             BuildNavigationOptions(builder, selectable);
 
-            builder.AppendLine();
-            builder.AppendLine(" " + _config.ButtonsInfo.ScrollInfo + "\n" + " " + _config.ButtonsInfo.SelectInfo);
-            builder.AppendLine(pad);
+            if (_menu.MenuType != MenuType.KeyPress)
+            {
+                builder.AppendLine();
+                builder.AppendLine(" " + _config.ButtonsInfo.ScrollInfo);
+            }
+            if (_menu.MenuType == MenuType.Both)
+            {
+                builder.AppendLine(" " + _config.ButtonsInfo.SelectInfo);
+                builder.AppendLine(pad);
+            }
         }
 
         private void BuildOptionsList(StringBuilder builder, int currentOffset, int selectable)
@@ -272,7 +282,7 @@ namespace CS2ScreenMenuAPI.Internal
             for (int i = 0; i < selectable; i++)
             {
                 var option = _menu.MenuOptions[currentOffset + i];
-                string prefix = (CurrentSelection == i) ? "> " : "  ";
+                string prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == i) ? "> " : "  ";
                 string displayText = option.Disabled ? $"{option.Text} (Disabled)" : option.Text;
                 builder.AppendLine($"{prefix}{i + 1}. {displayText}");
             }
@@ -281,23 +291,26 @@ namespace CS2ScreenMenuAPI.Internal
         private void BuildNavigationOptions(StringBuilder builder, int selectable)
         {
             builder.AppendLine("\u200B");
+            string prefix;
+
             if (CurrentPage == 0)
             {
                 if (_menu.IsSubMenu)
                 {
-                    string prefix = (CurrentSelection == selectable + 0) ? "> " : "  ";
+                    // Only show the arrow for Scrollable or Both types
+                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 0) ? "> " : "  ";
                     builder.AppendLine($"{prefix}7. Back");
 
                     if (_menu.MenuOptions.Count > NUM_PER_PAGE)
                     {
-                        prefix = (CurrentSelection == selectable + 1) ? "> " : "  ";
+                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 1) ? "> " : "  ";
                         builder.AppendLine($"{prefix}8. Next");
                     }
 
                     if (_menu.HasExitOption)
                     {
                         int expectedIndex = selectable + (_menu.MenuOptions.Count > NUM_PER_PAGE ? 2 : 1);
-                        prefix = (CurrentSelection == expectedIndex) ? "> " : "  ";
+                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == expectedIndex) ? "> " : "  ";
                         builder.AppendLine($"{prefix}9. Close");
                     }
                 }
@@ -306,31 +319,33 @@ namespace CS2ScreenMenuAPI.Internal
                     int offset = selectable;
                     if (_menu.MenuOptions.Count > NUM_PER_PAGE)
                     {
-                        string prefix = (CurrentSelection == offset) ? "> " : "  ";
+                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "  ";
                         builder.AppendLine($"{prefix}8. Next");
                         offset++;
                     }
                     if (_menu.HasExitOption)
                     {
-                        string prefix = (CurrentSelection == offset) ? "> " : "  ";
+                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "  ";
                         builder.AppendLine($"{prefix}9. Close");
                     }
                 }
             }
             else
             {
-                string prefix = (CurrentSelection == selectable + 0) ? "> " : "  ";
+                prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 0) ? "> " : "  ";
                 builder.AppendLine($"{prefix}7. Back");
+
                 int offset = selectable + 1;
                 if ((_menu.MenuOptions.Count - CurrentPage * NUM_PER_PAGE) > NUM_PER_PAGE)
                 {
-                    prefix = (CurrentSelection == offset) ? "> " : "  ";
+                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "  ";
                     builder.AppendLine($"{prefix}8. Next");
                     offset++;
                 }
+
                 if (_menu.HasExitOption)
                 {
-                    prefix = (CurrentSelection == offset) ? "> " : "  ";
+                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "  ";
                     builder.AppendLine($"{prefix}9. Close");
                 }
             }
@@ -500,6 +515,9 @@ namespace CS2ScreenMenuAPI.Internal
 
         public void OnKeyPress(CCSPlayerController player, int key)
         {
+            if (_menu.MenuType == MenuType.Scrollable)
+                return;
+
             if (player.Handle != _player.Handle)
                 return;
 
@@ -580,7 +598,7 @@ namespace CS2ScreenMenuAPI.Internal
 
         public void Close()
         {
-            if (_hudText != null)
+            if (_hudText != null && _hudText.IsValid)
             {
                 _hudText.Enabled = false;
                 _hudText.AcceptInput("Kill", _hudText);
