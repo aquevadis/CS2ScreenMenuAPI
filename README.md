@@ -155,7 +155,7 @@ namespace Example
     }
 }
 ```
-MenuTypes
+# MenuTypes
 ```C#
 using System.Drawing;
 using CounterStrikeSharp.API.Core;
