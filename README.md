@@ -209,6 +209,11 @@ namespace Example
     }
 }
 ```
+
+You can use this API in your project by installing it from Manage NuGet Packages or add it with this command
+```cmd
+dotnet add package CS2ScreenMenuAPI
+```
 ## TODO List
 
 - [ ] Allowing spectators to use the menu
