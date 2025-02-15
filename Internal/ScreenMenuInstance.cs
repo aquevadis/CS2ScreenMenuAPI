@@ -240,8 +240,8 @@ namespace CS2ScreenMenuAPI.Internal
                     35,
                     _menu.TextColor,
                     _menu.FontName,
-                    -5.5f,
-                    2.8f,
+                    _menu.MenuPositionX,
+                    _menu.MenuPositionY,
                     true,
                     true
                 );
@@ -283,7 +283,7 @@ namespace CS2ScreenMenuAPI.Internal
             {
                 var option = _menu.MenuOptions[currentOffset + i];
                 string prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == i) ? "> " : "  ";
-                string displayText = option.Disabled ? $"{option.Text} (Disabled)" : option.Text;
+                string displayText = option.Disabled ? $"{option.Text} {_config.Translations.DisabledOption}" : option.Text;
                 builder.AppendLine($"{prefix}{i + 1}. {displayText}");
             }
         }
@@ -299,19 +299,19 @@ namespace CS2ScreenMenuAPI.Internal
                 {
                     // Only show the arrow for Scrollable or Both types
                     prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 0) ? "> " : "  ";
-                    builder.AppendLine($"{prefix}7. Back");
+                    builder.AppendLine($"{prefix}7. {_config.Translations.BackButton}");
 
                     if (_menu.MenuOptions.Count > NUM_PER_PAGE)
                     {
                         prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 1) ? "> " : "  ";
-                        builder.AppendLine($"{prefix}8. Next");
+                        builder.AppendLine($"{prefix}8. {_config.Translations.NextButton}");
                     }
 
                     if (_menu.HasExitOption)
                     {
                         int expectedIndex = selectable + (_menu.MenuOptions.Count > NUM_PER_PAGE ? 2 : 1);
                         prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == expectedIndex) ? "> " : "  ";
-                        builder.AppendLine($"{prefix}9. Close");
+                        builder.AppendLine($"{prefix}9. {_config.Translations.ExitButton}");
                     }
                 }
                 else
@@ -320,33 +320,33 @@ namespace CS2ScreenMenuAPI.Internal
                     if (_menu.MenuOptions.Count > NUM_PER_PAGE)
                     {
                         prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "  ";
-                        builder.AppendLine($"{prefix}8. Next");
+                        builder.AppendLine($"{prefix}8. {_config.Translations.NextButton}");
                         offset++;
                     }
                     if (_menu.HasExitOption)
                     {
                         prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "  ";
-                        builder.AppendLine($"{prefix}9. Close");
+                        builder.AppendLine($"{prefix}9. {_config.Translations.ExitButton}");
                     }
                 }
             }
             else
             {
                 prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 0) ? "> " : "  ";
-                builder.AppendLine($"{prefix}7. Back");
+                builder.AppendLine($"{prefix}7. {_config.Translations.BackButton}");
 
                 int offset = selectable + 1;
                 if ((_menu.MenuOptions.Count - CurrentPage * NUM_PER_PAGE) > NUM_PER_PAGE)
                 {
                     prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "  ";
-                    builder.AppendLine($"{prefix}8. Next");
+                    builder.AppendLine($"{prefix}8. {_config.Translations.NextButton}");
                     offset++;
                 }
 
                 if (_menu.HasExitOption)
                 {
                     prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "  ";
-                    builder.AppendLine($"{prefix}9. Close");
+                    builder.AppendLine($"{prefix}9. {_config.Translations.ExitButton}");
                 }
             }
         }

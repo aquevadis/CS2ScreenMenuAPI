@@ -1,10 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿using System.Drawing;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CounterStrikeSharp.API;
-using CounterStrikeSharp.API.Core;
+using CS2ScreenMenuAPI.Extensions;
+using CS2ScreenMenuAPI.Enums;
 
 namespace CS2ScreenMenuAPI.Config
 {
@@ -22,6 +21,8 @@ namespace CS2ScreenMenuAPI.Config
 
         public Buttons_Config Buttons { get; set; } = new Buttons_Config();
         public Buttons_Info ButtonsInfo { get; set; } = new Buttons_Info();
+        public Menu_Translations Translations { get; set; } = new Menu_Translations();
+        public Default_Settings DefaultSettings { get; set; } = new Default_Settings();
 
         public MenuConfig() { }
 
@@ -61,6 +62,8 @@ namespace CS2ScreenMenuAPI.Config
                 {
                     Buttons = config.Buttons;
                     ButtonsInfo = config.ButtonsInfo;
+                    Translations = config.Translations;
+                    DefaultSettings = config.DefaultSettings;
                 }
             }
             catch (Exception ex)
@@ -85,6 +88,19 @@ namespace CS2ScreenMenuAPI.Config
     ""ButtonsInfo"": {
         ""ScrollInfo"": ""[W/S] Scroll"",
         ""SelectInfo"": ""[E] Select""
+    },
+    ""DefaultSettings"": {
+        ""MenuType"": ""Both"",
+        ""TextColor"": ""DarkOrange"",
+        ""MenuPositionX"": -5.5,
+        ""MenuPositionY"": 2.8,
+        ""MenuFont"": ""Verdana Bold""
+    },
+    ""Translations"": {
+        ""NextButton"": ""Next"",
+        ""BackButton"": ""Back"",
+        ""ExitButton"": ""Exit"",
+        ""DisabledOption"": ""(Disabled)""
     }
     /* 
         Buttons mapping:
@@ -160,5 +176,25 @@ namespace CS2ScreenMenuAPI.Config
     {
         public string ScrollInfo { get; set; } = "[W/S] Scroll";
         public string SelectInfo { get; set; } = "[E] Select";
+    }
+
+    public class Menu_Translations
+    {
+        public string NextButton { get; set; } = "Next";
+        public string BackButton { get; set; } = "Back";
+        public string ExitButton { get; set; } = "Exit";
+        public string DisabledOption { get; set; } = "(Disabled)";
+    }
+
+    public class Default_Settings
+    {
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public MenuType MenuType { get; set; } = MenuType.Both;
+
+        [JsonConverter(typeof(ColorJsonConverter))]
+        public Color TextColor { get; set; } = Color.DarkOrange;
+        public float MenuPositionX { get; set; } = -5.5f;
+        public float MenuPositionY { get; set; } = 2.8f;
+        public string MenuFont { get; set; } = "Verdana Bold";
     }
 }
