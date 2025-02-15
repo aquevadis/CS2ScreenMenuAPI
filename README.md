@@ -13,6 +13,19 @@
     "ButtonsInfo": {
         "ScrollInfo": "[W/S] Scroll",
         "SelectInfo": "[E] Select"
+    },
+    "DefaultSettings": {
+        "MenuType": "Both",
+        "TextColor": "DarkOrange",
+        "MenuPositionX": -5.5,
+        "MenuPositionY": 2.8,
+        "MenuFont": "Verdana Bold"
+    },
+    "Translations": {
+        "NextButton": "Next",
+        "BackButton": "Back",
+        "ExitButton": "Exit",
+        "DisabledOption": "(Disabled)"
     }
     /* 
         Buttons mapping:
