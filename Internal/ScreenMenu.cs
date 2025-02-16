@@ -13,6 +13,7 @@ namespace CS2ScreenMenuAPI
         public bool HasExitOption { get; set; } = true;
         public ScreenMenu? ParentMenu { get; set; } = null;
         public PostSelectAction PostSelectAction { get; set; } = PostSelectAction.Nothing;
+        public int OptionsCount => MenuOptions.Count;
         public Color TextColor
         {
             get => _config.DefaultSettings.TextColor;
