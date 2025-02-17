@@ -271,8 +271,8 @@ namespace CS2ScreenMenuAPI.Internal
             if (_menu.MenuType == MenuType.Both)
             {
                 builder.AppendLine("\u200B");
-                builder.AppendLine(_config.ButtonsInfo.ScrollInfo);
-                builder.AppendLine(_config.ButtonsInfo.SelectInfo);
+                builder.AppendLine(_config.Translations.ScrollInfo);
+                builder.AppendLine(_config.Translations.SelectInfo);
             }
         }
 
@@ -281,7 +281,7 @@ namespace CS2ScreenMenuAPI.Internal
             for (int i = 0; i < selectable; i++)
             {
                 var option = _menu.MenuOptions[currentOffset + i];
-                string prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == i) ? "> " : "";
+                string prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == i) ? _config.Translations.SelectPrefix : "";
                 string displayText = option.Disabled ? $"{option.Text} {_config.Translations.DisabledOption}" : option.Text;
                 builder.AppendLine($"{prefix}{i + 1}. {displayText}");
             }
@@ -296,19 +296,19 @@ namespace CS2ScreenMenuAPI.Internal
                 if (_menu.IsSubMenu)
                 {
                     // Only show the arrow for Scrollable or Both types
-                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 0) ? "> " : "";
+                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 0) ? _config.Translations.SelectPrefix : "";
                     builder.AppendLine($"{prefix}7. {_config.Translations.BackButton}");
 
                     if (_menu.MenuOptions.Count > NUM_PER_PAGE)
                     {
-                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 1) ? "> " : "";
+                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 1) ? _config.Translations.SelectPrefix : "";
                         builder.AppendLine($"{prefix}8. {_config.Translations.NextButton}");
                     }
 
                     if (_menu.HasExitOption)
                     {
                         int expectedIndex = selectable + (_menu.MenuOptions.Count > NUM_PER_PAGE ? 2 : 1);
-                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == expectedIndex) ? "> " : "";
+                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == expectedIndex) ? _config.Translations.SelectPrefix : "";
                         builder.AppendLine($"{prefix}9. {_config.Translations.ExitButton}");
                     }
                 }
@@ -317,33 +317,33 @@ namespace CS2ScreenMenuAPI.Internal
                     int offset = selectable;
                     if (_menu.MenuOptions.Count > NUM_PER_PAGE)
                     {
-                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "";
+                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? _config.Translations.SelectPrefix : "";
                         builder.AppendLine($"{prefix}8. {_config.Translations.NextButton}");
                         offset++;
                     }
                     if (_menu.HasExitOption)
                     {
-                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "";
+                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? _config.Translations.SelectPrefix : "";
                         builder.AppendLine($"{prefix}9. {_config.Translations.ExitButton}");
                     }
                 }
             }
             else
             {
-                prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 0) ? "> " : "";
+                prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 0) ? _config.Translations.SelectPrefix : "";
                 builder.AppendLine($"{prefix}7. {_config.Translations.BackButton}");
 
                 int offset = selectable + 1;
                 if ((_menu.MenuOptions.Count - CurrentPage * NUM_PER_PAGE) > NUM_PER_PAGE)
                 {
-                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "";
+                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? _config.Translations.SelectPrefix : "";
                     builder.AppendLine($"{prefix}8. {_config.Translations.NextButton}");
                     offset++;
                 }
 
                 if (_menu.HasExitOption)
                 {
-                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "";
+                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? _config.Translations.SelectPrefix : "";
                     builder.AppendLine($"{prefix}9. {_config.Translations.ExitButton}");
                 }
             }

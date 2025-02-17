@@ -20,7 +20,6 @@ namespace CS2ScreenMenuAPI.Config
         };
 
         public Buttons_Config Buttons { get; set; } = new Buttons_Config();
-        public Buttons_Info ButtonsInfo { get; set; } = new Buttons_Info();
         public Menu_Translations Translations { get; set; } = new Menu_Translations();
         public Default_Settings DefaultSettings { get; set; } = new Default_Settings();
 
@@ -61,7 +60,6 @@ namespace CS2ScreenMenuAPI.Config
                 if (config != null)
                 {
                     Buttons = config.Buttons;
-                    ButtonsInfo = config.ButtonsInfo;
                     Translations = config.Translations;
                     DefaultSettings = config.DefaultSettings;
                 }
@@ -85,13 +83,9 @@ namespace CS2ScreenMenuAPI.Config
         ""ScrollDownButton"": ""S"",
         ""SelectButton"": ""E""
     },
-    ""ButtonsInfo"": {
-        ""ScrollInfo"": ""[W/S] Scroll"",
-        ""SelectInfo"": ""[E] Select""
-    },
     ""DefaultSettings"": {
         ""MenuType"": ""Both"",
-        ""TextColor"": ""DarkOrange"",
+        ""TextColor"": ""Orange"",
         ""PositionX"": -5.5,
         ""PositionY"": 0,
         ""Background"": true,
@@ -104,7 +98,10 @@ namespace CS2ScreenMenuAPI.Config
         ""NextButton"": ""Next"",
         ""BackButton"": ""Back"",
         ""ExitButton"": ""Exit"",
-        ""DisabledOption"": ""(Disabled)""
+        ""DisabledOption"": ""(Disabled)"",
+        ""ScrollInfo"": ""[W/S] Scroll"",
+        ""SelectInfo"": ""[E] Select"",
+        ""SelectPrefix"": ""‣ ""
     }
     /* 
         Buttons mapping:
@@ -176,18 +173,15 @@ namespace CS2ScreenMenuAPI.Config
         public string SelectButton { get; set; } = "E";
     }
 
-    public class Buttons_Info
-    {
-        public string ScrollInfo { get; set; } = "[W/S] Scroll";
-        public string SelectInfo { get; set; } = "[E] Select";
-    }
-
     public class Menu_Translations
     {
         public string NextButton { get; set; } = "Next";
         public string BackButton { get; set; } = "Back";
         public string ExitButton { get; set; } = "Exit";
         public string DisabledOption { get; set; } = "(Disabled)";
+        public string ScrollInfo { get; set; } = "[W/S] Scroll";
+        public string SelectInfo { get; set; } = "[E] Select";
+        public string SelectPrefix { get; set; } = "‣ ";
     }
 
     public class Default_Settings

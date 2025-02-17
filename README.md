@@ -1,4 +1,4 @@
-# Config
+﻿# Config
 ```jsonc
 {
     /* 
@@ -9,10 +9,6 @@
         "ScrollUpButton": "W",
         "ScrollDownButton": "S",
         "SelectButton": "E"
-    },
-    "ButtonsInfo": {
-        "ScrollInfo": "[W/S] Scroll",
-        "SelectInfo": "[E] Select"
     },
     "DefaultSettings": {
         "MenuType": "Both",
@@ -29,7 +25,10 @@
         "NextButton": "Next",
         "BackButton": "Back",
         "ExitButton": "Exit",
-        "DisabledOption": "(Disabled)"
+        "DisabledOption": "(Disabled)",
+        "ScrollInfo": "[W/S] Scroll",
+        "SelectInfo": "[E] Select",
+        "SelectPrefix": "‣ ",
     }
     /* 
         Buttons mapping:
