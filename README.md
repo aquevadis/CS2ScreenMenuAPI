@@ -70,21 +70,15 @@ NOTE: The config file creates automaticly when using a menu for the first time e
 ANOTHER NOTE: When using the API in a plugin you don't need to do anything other than just adding the dll in the project and in the .csproj like this:
 ```csproj
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="CounterStrikeSharp.API" Version="1.0.305" />
-  </ItemGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
     <ItemGroup>
-	    <Reference Include="CS2ScreenMenuAPI">
-		    <HintPath>..\..\CS2ScreenMenuAPI.dll</HintPath>
-	    </Reference>
+        <PackageReference Include="CounterStrikeSharp.API" Version="1.0.305" />
+        <Reference Include="CS2ScreenMenuAPI.dll" />
     </ItemGroup>
 </Project>
 ```
