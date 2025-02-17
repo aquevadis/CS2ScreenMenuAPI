@@ -21,10 +21,10 @@ namespace CS2ScreenMenuAPI.Internal
             string font = "",
             float shiftX = 0f,
             float shiftY = 0f,
-            bool drawBackground = false,
+            bool drawBackground = true,
             float backgroundHeight = 0.2f,
-            float backgroundWidth = 0.15f,
-            bool isMenu = true)
+            float backgroundWidth = 0.15f
+        )
         {
             CCSPlayerPawn pawn = player.PlayerPawn.Value!;
 
@@ -55,11 +55,8 @@ namespace CS2ScreenMenuAPI.Internal
             if (drawBackground)
             {
                 worldText.DrawBackground = true;
-                if (isMenu)
-                {
-                    worldText.BackgroundBorderHeight = backgroundHeight;
-                    worldText.BackgroundBorderWidth = backgroundWidth;
-                }
+                worldText.BackgroundBorderHeight = backgroundHeight;
+                worldText.BackgroundBorderWidth = backgroundWidth;
             }
 
             QAngle eyeAngles = pawn.EyeAngles;
