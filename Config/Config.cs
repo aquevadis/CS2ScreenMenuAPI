@@ -93,7 +93,7 @@ namespace CS2ScreenMenuAPI.Config
         ""BackgroundWidth"": 0.2,
         ""Font"": ""Arial Bold"",
         ""Size"": 32,
-        ""Spacing"": true,
+        ""Spacing"": true
     },
     ""Translations"": {
         ""NextButton"": ""Next"",

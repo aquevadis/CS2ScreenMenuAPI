@@ -29,7 +29,7 @@
         "DisabledOption": "(Disabled)",
         "ScrollInfo": "[W/S] Scroll",
         "SelectInfo": "[E] Select",
-        "SelectPrefix": "‣ ",
+        "SelectPrefix": "‣ "
     }
     /* 
         Buttons mapping:
