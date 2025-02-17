@@ -20,7 +20,6 @@ namespace CS2ScreenMenuAPI.Config
         };
 
         public Buttons_Config Buttons { get; set; } = new Buttons_Config();
-        public Buttons_Info ButtonsInfo { get; set; } = new Buttons_Info();
         public Menu_Translations Translations { get; set; } = new Menu_Translations();
         public Default_Settings DefaultSettings { get; set; } = new Default_Settings();
 
@@ -61,7 +60,6 @@ namespace CS2ScreenMenuAPI.Config
                 if (config != null)
                 {
                     Buttons = config.Buttons;
-                    ButtonsInfo = config.ButtonsInfo;
                     Translations = config.Translations;
                     DefaultSettings = config.DefaultSettings;
                 }
@@ -85,22 +83,26 @@ namespace CS2ScreenMenuAPI.Config
         ""ScrollDownButton"": ""S"",
         ""SelectButton"": ""E""
     },
-    ""ButtonsInfo"": {
-        ""ScrollInfo"": ""[W/S] Scroll"",
-        ""SelectInfo"": ""[E] Select""
-    },
     ""DefaultSettings"": {
         ""MenuType"": ""Both"",
-        ""TextColor"": ""DarkOrange"",
-        ""MenuPositionX"": -5.5,
-        ""MenuPositionY"": 2.8,
-        ""MenuFont"": ""Verdana Bold""
+        ""TextColor"": ""Orange"",
+        ""PositionX"": -5.5,
+        ""PositionY"": 0,
+        ""Background"": true,
+        ""BackgroundHeight"": 0,
+        ""BackgroundWidth"": 0.2,
+        ""Font"": ""Arial Bold"",
+        ""Size"": 32,
+        ""Spacing"": true
     },
     ""Translations"": {
         ""NextButton"": ""Next"",
         ""BackButton"": ""Back"",
         ""ExitButton"": ""Exit"",
-        ""DisabledOption"": ""(Disabled)""
+        ""DisabledOption"": ""(Disabled)"",
+        ""ScrollInfo"": ""[W/S] Scroll"",
+        ""SelectInfo"": ""[E] Select"",
+        ""SelectPrefix"": ""‣ ""
     }
     /* 
         Buttons mapping:
@@ -172,18 +174,15 @@ namespace CS2ScreenMenuAPI.Config
         public string SelectButton { get; set; } = "E";
     }
 
-    public class Buttons_Info
-    {
-        public string ScrollInfo { get; set; } = "[W/S] Scroll";
-        public string SelectInfo { get; set; } = "[E] Select";
-    }
-
     public class Menu_Translations
     {
         public string NextButton { get; set; } = "Next";
         public string BackButton { get; set; } = "Back";
         public string ExitButton { get; set; } = "Exit";
         public string DisabledOption { get; set; } = "(Disabled)";
+        public string ScrollInfo { get; set; } = "[W/S] Scroll";
+        public string SelectInfo { get; set; } = "[E] Select";
+        public string SelectPrefix { get; set; } = "‣ ";
     }
 
     public class Default_Settings
@@ -192,9 +191,14 @@ namespace CS2ScreenMenuAPI.Config
         public MenuType MenuType { get; set; } = MenuType.Both;
 
         [JsonConverter(typeof(ColorJsonConverter))]
-        public Color TextColor { get; set; } = Color.DarkOrange;
-        public float MenuPositionX { get; set; } = -5.5f;
-        public float MenuPositionY { get; set; } = 2.8f;
-        public string MenuFont { get; set; } = "Verdana Bold";
+        public Color TextColor { get; set; } = Color.Orange;
+        public float PositionX { get; set; } = -5.5f;
+        public float PositionY { get; set; } = 0f;
+        public bool Background { get; set; } = true;
+        public float BackgroundHeight { get; set; } = 0f;
+        public float BackgroundWidth { get; set; } = 0.2f;
+        public string Font { get; set; } = "Arial Bold";
+        public float Size { get; set; } = 32;
+        public bool Spacing { get; set; } = true;
     }
 }

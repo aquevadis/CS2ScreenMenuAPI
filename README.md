@@ -1,4 +1,4 @@
-# Config
+﻿# Config
 ```jsonc
 {
     /* 
@@ -10,22 +10,26 @@
         "ScrollDownButton": "S",
         "SelectButton": "E"
     },
-    "ButtonsInfo": {
-        "ScrollInfo": "[W/S] Scroll",
-        "SelectInfo": "[E] Select"
-    },
     "DefaultSettings": {
         "MenuType": "Both",
-        "TextColor": "DarkOrange",
-        "MenuPositionX": -5.5,
-        "MenuPositionY": 2.8,
-        "MenuFont": "Verdana Bold"
+        "TextColor": "Orange",
+        "PositionX": -5.5,
+        "PositionY": 0,
+        "Background": true,
+        "BackgroundHeight": 0,
+        "BackgroundWidth": 0.2,
+        "Font": "Arial Bold",
+        "Size": 32,
+        "Spacing": true
     },
     "Translations": {
         "NextButton": "Next",
         "BackButton": "Back",
         "ExitButton": "Exit",
-        "DisabledOption": "(Disabled)"
+        "DisabledOption": "(Disabled)",
+        "ScrollInfo": "[W/S] Scroll",
+        "SelectInfo": "[E] Select",
+        "SelectPrefix": "‣ "
     }
     /* 
         Buttons mapping:
@@ -66,24 +70,16 @@ NOTE: The config file creates automaticly when using a menu for the first time e
 ANOTHER NOTE: When using the API in a plugin you don't need to do anything other than just adding the dll in the project and in the .csproj like this:
 ```csproj
 <Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="CounterStrikeSharp.API" Version="1.0.305" />
-  </ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="CS2ScreenMenuAPI">
-			<HintPath>..\..\CS2ScreenMenuAPI.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-	
-
+    <ItemGroup>
+        <PackageReference Include="CounterStrikeSharp.API" Version="1.0.305" />
+        <Reference Include="CS2ScreenMenuAPI.dll" />
+    </ItemGroup>
 </Project>
 ```
 # MenuExample

@@ -226,9 +226,8 @@ namespace CS2ScreenMenuAPI.Internal
         public void Display()
         {
             var builder = new StringBuilder();
-            string pad = new string('\u00A0', 30);
 
-            BuildMenuText(builder, pad);
+            BuildMenuText(builder);
 
             string menuText = builder.ToString();
 
@@ -237,13 +236,14 @@ namespace CS2ScreenMenuAPI.Internal
                 _hudText = WorldTextManager.Create(
                     _player,
                     menuText,
-                    35,
+                    _menu.Size,
                     _menu.TextColor,
                     _menu.FontName,
-                    _menu.MenuPositionX,
-                    _menu.MenuPositionY,
-                    true,
-                    true
+                    _menu.PositionX,
+                    _menu.PositionY,
+                    _menu.Background,
+                    _menu.BackgroundHeight,
+                    _menu.BackgroundWidth
                 );
             }
 
@@ -253,28 +253,32 @@ namespace CS2ScreenMenuAPI.Internal
             }
         }
 
-        private void BuildMenuText(StringBuilder builder, string pad)
+        private void BuildMenuText(StringBuilder builder)
         {
-            builder.AppendLine("\u200B");
-            builder.AppendLine($" {" "}{_menu.Title}");
-            builder.AppendLine("\u200B");
-
             int currentOffset = CurrentPage * NUM_PER_PAGE;
             int selectable = Math.Min(NUM_PER_PAGE, _menu.MenuOptions.Count - currentOffset);
 
+            if (_config.DefaultSettings.Spacing)
+                builder.AppendLine("\u200B");
+
+            builder.AppendLine(_menu.Title);
+            builder.AppendLine("\u200B");
+
             BuildOptionsList(builder, currentOffset, selectable);
+
+            builder.AppendLine("\u200B");
+
             BuildNavigationOptions(builder, selectable);
 
-            if (_menu.MenuType != MenuType.KeyPress)
-            {
-                builder.AppendLine();
-                builder.AppendLine(" " + _config.ButtonsInfo.ScrollInfo);
-            }
             if (_menu.MenuType == MenuType.Both)
             {
-                builder.AppendLine(" " + _config.ButtonsInfo.SelectInfo);
-                builder.AppendLine(pad);
+                builder.AppendLine("\u200B");
+                builder.AppendLine(_config.Translations.ScrollInfo);
+                builder.AppendLine(_config.Translations.SelectInfo);
             }
+
+            if (_config.DefaultSettings.Spacing)
+                builder.AppendLine("\u200B");
         }
 
         private void BuildOptionsList(StringBuilder builder, int currentOffset, int selectable)
@@ -282,7 +286,7 @@ namespace CS2ScreenMenuAPI.Internal
             for (int i = 0; i < selectable; i++)
             {
                 var option = _menu.MenuOptions[currentOffset + i];
-                string prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == i) ? "> " : "  ";
+                string prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == i) ? _config.Translations.SelectPrefix : "";
                 string displayText = option.Disabled ? $"{option.Text} {_config.Translations.DisabledOption}" : option.Text;
                 builder.AppendLine($"{prefix}{i + 1}. {displayText}");
             }
@@ -290,7 +294,6 @@ namespace CS2ScreenMenuAPI.Internal
 
         private void BuildNavigationOptions(StringBuilder builder, int selectable)
         {
-            builder.AppendLine("\u200B");
             string prefix;
 
             if (CurrentPage == 0)
@@ -298,19 +301,19 @@ namespace CS2ScreenMenuAPI.Internal
                 if (_menu.IsSubMenu)
                 {
                     // Only show the arrow for Scrollable or Both types
-                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 0) ? "> " : "  ";
+                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 0) ? _config.Translations.SelectPrefix : "";
                     builder.AppendLine($"{prefix}7. {_config.Translations.BackButton}");
 
                     if (_menu.MenuOptions.Count > NUM_PER_PAGE)
                     {
-                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 1) ? "> " : "  ";
+                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 1) ? _config.Translations.SelectPrefix : "";
                         builder.AppendLine($"{prefix}8. {_config.Translations.NextButton}");
                     }
 
                     if (_menu.HasExitOption)
                     {
                         int expectedIndex = selectable + (_menu.MenuOptions.Count > NUM_PER_PAGE ? 2 : 1);
-                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == expectedIndex) ? "> " : "  ";
+                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == expectedIndex) ? _config.Translations.SelectPrefix : "";
                         builder.AppendLine($"{prefix}9. {_config.Translations.ExitButton}");
                     }
                 }
@@ -319,33 +322,33 @@ namespace CS2ScreenMenuAPI.Internal
                     int offset = selectable;
                     if (_menu.MenuOptions.Count > NUM_PER_PAGE)
                     {
-                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "  ";
+                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? _config.Translations.SelectPrefix : "";
                         builder.AppendLine($"{prefix}8. {_config.Translations.NextButton}");
                         offset++;
                     }
                     if (_menu.HasExitOption)
                     {
-                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "  ";
+                        prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? _config.Translations.SelectPrefix : "";
                         builder.AppendLine($"{prefix}9. {_config.Translations.ExitButton}");
                     }
                 }
             }
             else
             {
-                prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 0) ? "> " : "  ";
+                prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == selectable + 0) ? _config.Translations.SelectPrefix : "";
                 builder.AppendLine($"{prefix}7. {_config.Translations.BackButton}");
 
                 int offset = selectable + 1;
                 if ((_menu.MenuOptions.Count - CurrentPage * NUM_PER_PAGE) > NUM_PER_PAGE)
                 {
-                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "  ";
+                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? _config.Translations.SelectPrefix : "";
                     builder.AppendLine($"{prefix}8. {_config.Translations.NextButton}");
                     offset++;
                 }
 
                 if (_menu.HasExitOption)
                 {
-                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? "> " : "  ";
+                    prefix = (_menu.MenuType != MenuType.KeyPress && CurrentSelection == offset) ? _config.Translations.SelectPrefix : "";
                     builder.AppendLine($"{prefix}9. {_config.Translations.ExitButton}");
                 }
             }

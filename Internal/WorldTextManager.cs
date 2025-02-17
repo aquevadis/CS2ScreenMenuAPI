@@ -16,13 +16,15 @@ namespace CS2ScreenMenuAPI.Internal
         internal static CPointWorldText Create(
             CCSPlayerController player,
             string text,
-            int size = 100,
+            float size = 35,
             Color? color = null,
             string font = "",
             float shiftX = 0f,
             float shiftY = 0f,
-            bool drawBackground = false,
-            bool isMenu = true)
+            bool drawBackground = true,
+            float backgroundHeight = 0.2f,
+            float backgroundWidth = 0.15f
+        )
         {
             CCSPlayerPawn pawn = player.PlayerPawn.Value!;
 
@@ -47,17 +49,14 @@ namespace CS2ScreenMenuAPI.Internal
             worldText.WorldUnitsPerPx = (0.25f / 1050) * size;
             worldText.FontName = font;
             worldText.JustifyHorizontal = PointWorldTextJustifyHorizontal_t.POINT_WORLD_TEXT_JUSTIFY_HORIZONTAL_LEFT;
-            worldText.JustifyVertical = PointWorldTextJustifyVertical_t.POINT_WORLD_TEXT_JUSTIFY_VERTICAL_TOP;
+            worldText.JustifyVertical = PointWorldTextJustifyVertical_t.POINT_WORLD_TEXT_JUSTIFY_VERTICAL_CENTER;
             worldText.ReorientMode = PointWorldTextReorientMode_t.POINT_WORLD_TEXT_REORIENT_NONE;
 
             if (drawBackground)
             {
                 worldText.DrawBackground = true;
-                if (isMenu)
-                {
-                    worldText.BackgroundBorderHeight = 0.2f;
-                    worldText.BackgroundBorderWidth = 0.15f;
-                }
+                worldText.BackgroundBorderHeight = backgroundHeight;
+                worldText.BackgroundBorderWidth = backgroundWidth;
             }
 
             QAngle eyeAngles = pawn.EyeAngles;
