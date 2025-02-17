@@ -17,12 +17,13 @@
     "DefaultSettings": {
         "MenuType": "Both",
         "TextColor": "DarkOrange",
-        "MenuPositionX": -5.5,
-        "MenuPositionY": 2.8,
-        "MenuBackground" true,
-        "MenuBackgroundHeight" 0.2,
-        "MenuBackgroundWidth" 0.15,
-        "MenuFont": "Verdana Bold"
+        "PositionX": -5.5,
+        "PositionY": 2.8,
+        "Background" true,
+        "BackgroundHeight" 0.2,
+        "BackgroundWidth" 0.15,
+        "Font": "Verdana Bold",
+        "Size": 35
     },
     "Translations": {
         "NextButton": "Next",

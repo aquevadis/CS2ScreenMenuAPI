@@ -16,7 +16,7 @@ namespace CS2ScreenMenuAPI.Internal
         internal static CPointWorldText Create(
             CCSPlayerController player,
             string text,
-            int size = 100,
+            float size = 35,
             Color? color = null,
             string font = "",
             float shiftX = 0f,

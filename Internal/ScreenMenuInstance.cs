@@ -237,14 +237,14 @@ namespace CS2ScreenMenuAPI.Internal
                 _hudText = WorldTextManager.Create(
                     _player,
                     menuText,
-                    35,
+                    _menu.Size,
                     _menu.TextColor,
                     _menu.FontName,
-                    _menu.MenuPositionX,
-                    _menu.MenuPositionY,
-                    _menu.MenuBackground,
-                    _menu.MenuBackgroundHeight,
-                    _menu.MenuBackgroundWidth,
+                    _menu.PositionX,
+                    _menu.PositionY,
+                    _menu.Background,
+                    _menu.BackgroundHeight,
+                    _menu.BackgroundWidth,
                     true
                 );
             }

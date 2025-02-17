@@ -21,38 +21,43 @@ namespace CS2ScreenMenuAPI
         }
         public string FontName
         {
-            get => _config.DefaultSettings.MenuFont;
-            set => _config.DefaultSettings.MenuFont = value;
+            get => _config.DefaultSettings.Font;
+            set => _config.DefaultSettings.Font = value;
         }
         public MenuType MenuType
         {
             get => _config.DefaultSettings.MenuType;
             set => _config.DefaultSettings.MenuType = value;
         }
-        public float MenuPositionX
+        public float PositionX
         {
-            get => _config.DefaultSettings.MenuPositionX;
-            set => _config.DefaultSettings.MenuPositionX = value;
+            get => _config.DefaultSettings.PositionX;
+            set => _config.DefaultSettings.PositionX = value;
         }
-        public float MenuPositionY
+        public float PositionY
         {
-            get => _config.DefaultSettings.MenuPositionY;
-            set => _config.DefaultSettings.MenuPositionY = value;
+            get => _config.DefaultSettings.PositionY;
+            set => _config.DefaultSettings.PositionY = value;
         }
-        public bool MenuBackground
+        public bool Background
         {
-            get => _config.DefaultSettings.MenuBackground;
-            set => _config.DefaultSettings.MenuBackground = value;
+            get => _config.DefaultSettings.Background;
+            set => _config.DefaultSettings.Background = value;
         }
-        public float MenuBackgroundHeight
+        public float BackgroundHeight
         {
-            get => _config.DefaultSettings.MenuBackgroundHeight;
-            set => _config.DefaultSettings.MenuBackgroundHeight = value;
+            get => _config.DefaultSettings.BackgroundHeight;
+            set => _config.DefaultSettings.BackgroundHeight = value;
         }
-        public float MenuBackgroundWidth
+        public float BackgroundWidth
         {
-            get => _config.DefaultSettings.MenuBackgroundWidth;
-            set => _config.DefaultSettings.MenuBackgroundWidth = value;
+            get => _config.DefaultSettings.BackgroundWidth;
+            set => _config.DefaultSettings.BackgroundWidth = value;
+        }
+        public float Size
+        {
+            get => _config.DefaultSettings.Size;
+            set => _config.DefaultSettings.Size = value;
         }
 
         public ScreenMenu(string title, BasePlugin plugin) : base(title)
