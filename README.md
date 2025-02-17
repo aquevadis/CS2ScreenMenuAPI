@@ -15,9 +15,9 @@
         "TextColor": "Orange",
         "PositionX": -5.5,
         "PositionY": 0,
-        "Background" true,
-        "BackgroundHeight" 0,
-        "BackgroundWidth" 0.2,
+        "Background": true,
+        "BackgroundHeight": 0,
+        "BackgroundWidth": 0.2,
         "Font": "Arial Bold",
         "Size": 32,
         "Spacing": true
@@ -81,13 +81,11 @@ ANOTHER NOTE: When using the API in a plugin you don't need to do anything other
     <PackageReference Include="CounterStrikeSharp.API" Version="1.0.305" />
   </ItemGroup>
 
-	<ItemGroup>
-		<Reference Include="CS2ScreenMenuAPI">
-			<HintPath>..\..\CS2ScreenMenuAPI.dll</HintPath>
-		</Reference>
-	</ItemGroup>
-	
-
+    <ItemGroup>
+	    <Reference Include="CS2ScreenMenuAPI">
+		    <HintPath>..\..\CS2ScreenMenuAPI.dll</HintPath>
+	    </Reference>
+    </ItemGroup>
 </Project>
 ```
 # MenuExample
