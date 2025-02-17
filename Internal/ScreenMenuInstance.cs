@@ -423,7 +423,6 @@ namespace CS2ScreenMenuAPI.Internal
                 {
                     if (navIndex == 0)
                     {
-                        // Back.
                         if (_menu.ParentMenu != null)
                         {
                             Close();
@@ -438,7 +437,10 @@ namespace CS2ScreenMenuAPI.Internal
                     {
                         if (_menu.MenuOptions.Count > NUM_PER_PAGE)
                         {
-                            NextPage();
+                            int newPage = CurrentPage + 1;
+                            int newSelectable = Math.Min(NUM_PER_PAGE, _menu.MenuOptions.Count - (newPage * NUM_PER_PAGE));
+                            int desiredSelection = newSelectable + 1;
+                            NextPage(desiredSelection);
                         }
                         else if (_menu.HasExitOption)
                         {
@@ -456,7 +458,10 @@ namespace CS2ScreenMenuAPI.Internal
                     {
                         if (navIndex == 0)
                         {
-                            NextPage();
+                            int newPage = CurrentPage + 1;
+                            int newSelectable = Math.Min(NUM_PER_PAGE, _menu.MenuOptions.Count - (newPage * NUM_PER_PAGE));
+                            int desiredSelection = newSelectable + 1;
+                            NextPage(desiredSelection);
                         }
                         else if (navIndex == 1 && _menu.HasExitOption)
                         {
@@ -474,15 +479,21 @@ namespace CS2ScreenMenuAPI.Internal
             }
             else
             {
-                if (navIndex == 0)
+                if (navIndex == 0) 
                 {
-                    PrevPage();
+                    int newPage = CurrentPage - 1;
+                    int newSelectable = Math.Min(NUM_PER_PAGE, _menu.MenuOptions.Count - (newPage * NUM_PER_PAGE));
+                    int desiredSelection = (_menu.IsSubMenu || newPage > 0) ? newSelectable : 0;
+                    PrevPage(desiredSelection);
                 }
                 else if (navIndex == 1)
                 {
                     if ((_menu.MenuOptions.Count - CurrentPage * NUM_PER_PAGE) > NUM_PER_PAGE)
                     {
-                        NextPage();
+                        int newPage = CurrentPage + 1;
+                        int newSelectable = Math.Min(NUM_PER_PAGE, _menu.MenuOptions.Count - (newPage * NUM_PER_PAGE));
+                        int desiredSelection = newSelectable + 1;
+                        NextPage(desiredSelection);
                     }
                     else if (_menu.HasExitOption)
                     {
@@ -496,25 +507,30 @@ namespace CS2ScreenMenuAPI.Internal
             }
         }
 
-        public void NextPage()
+
+
+        public void NextPage(int nextSelectionIndex = -1)
         {
             if ((CurrentPage + 1) * NUM_PER_PAGE < _menu.MenuOptions.Count)
             {
                 CurrentPage++;
-                CurrentSelection = 0;
+                CurrentSelection = (nextSelectionIndex >= 0) ? nextSelectionIndex : 0;
                 Display();
             }
         }
 
-        public void PrevPage()
+
+        public void PrevPage(int prevSelectionIndex = -1)
         {
             if (CurrentPage > 0)
             {
                 CurrentPage--;
-                CurrentSelection = 0;
+                CurrentSelection = (prevSelectionIndex >= 0) ? prevSelectionIndex : 0;
                 Display();
             }
         }
+
+
 
         public void OnKeyPress(CCSPlayerController player, int key)
         {

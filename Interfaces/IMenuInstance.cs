@@ -4,8 +4,8 @@ namespace CS2ScreenMenuAPI
 {
     public interface IMenuInstance
     {
-        void NextPage();
-        void PrevPage();
+        void NextPage(int nextSelectionIndex);
+        void PrevPage(int backSelectionIndex);
         void Reset();
         void Close();
         void Display();

@@ -1,6 +1,6 @@
-﻿// WorldTextManager.cs
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Threading.Channels;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CounterStrikeSharp.API.Modules.Entities;
@@ -13,7 +13,7 @@ namespace CS2ScreenMenuAPI.Internal
     {
         internal static Dictionary<uint, CCSPlayerController> WorldTextOwners = new();
 
-        internal static CPointWorldText Create(
+        internal static CPointWorldText? Create(
             CCSPlayerController player,
             string text,
             float size = 35,
@@ -26,19 +26,18 @@ namespace CS2ScreenMenuAPI.Internal
             float backgroundWidth = 0.15f
         )
         {
-            CCSPlayerPawn pawn = player.PlayerPawn.Value!;
+            Console.WriteLine($"[WorldTextManager] Creating text for player {player.PlayerName}");
 
-            var handle = new CHandle<CCSGOViewModel>(
-                (IntPtr)(pawn.ViewModelServices!.Handle +
-                         Schema.GetSchemaOffset("CCSPlayer_ViewModelServices", "m_hViewModel") + 4));
-
-            if (!handle.IsValid)
+            // Use our extension method to get (or create) the custom view.
+            CCSGOViewModel? viewmodel = player.EnsureCustomView(0);
+            if (viewmodel == null)
             {
-                CCSGOViewModel viewmodel = Utilities.CreateEntityByName<CCSGOViewModel>("predicted_viewmodel")!;
-                viewmodel.DispatchSpawn();
-                handle.Raw = viewmodel.EntityHandle.Raw;
-                Utilities.SetStateChanged(pawn, "CCSPlayerPawnBase", "m_pViewModelServices");
+                Console.WriteLine("[WorldTextManager] Failed to get viewmodel");
+                return null;
             }
+
+            // Use the player's pawn for positioning.
+            CCSPlayerPawn pawn = player.PlayerPawn.Value!;
 
             CPointWorldText worldText = Utilities.CreateEntityByName<CPointWorldText>("point_worldtext")!;
             worldText.MessageText = text;
@@ -76,7 +75,7 @@ namespace CS2ScreenMenuAPI.Internal
 
             worldText.DispatchSpawn();
             worldText.Teleport(pawn.AbsOrigin! + offset + new Vector(0, 0, pawn.ViewOffset.Z), angles, null);
-            worldText.AcceptInput("SetParent", handle.Value, null, "!activator");
+            worldText.AcceptInput("SetParent", viewmodel, null, "!activator");
 
             WorldTextOwners[worldText.Index] = player;
 
