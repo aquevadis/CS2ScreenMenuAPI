@@ -16,14 +16,14 @@
     },
     "DefaultSettings": {
         "MenuType": "Both",
-        "TextColor": "DarkOrange",
+        "TextColor": "Orange",
         "PositionX": -5.5,
-        "PositionY": 2.8,
+        "PositionY": 0,
         "Background" true,
-        "BackgroundHeight" 0.2,
-        "BackgroundWidth" 0.15,
-        "Font": "Verdana Bold",
-        "Size": 35
+        "BackgroundHeight" 0.1,
+        "BackgroundWidth" 0.1,
+        "Font": "Arial Bold",
+        "Size": 32
     },
     "Translations": {
         "NextButton": "Next",

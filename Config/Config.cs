@@ -93,12 +93,12 @@ namespace CS2ScreenMenuAPI.Config
         ""MenuType"": ""Both"",
         ""TextColor"": ""DarkOrange"",
         ""PositionX"": -5.5,
-        ""PositionY"": 2.8,
+        ""PositionY"": 0,
         ""Background"": true,
-        ""BackgroundHeight"": 0.2,
-        ""BackgroundWidth"": 0.15,
-        ""Font"": ""Verdana Bold"",
-        ""Size"": 35
+        ""BackgroundHeight"": 0.1,
+        ""BackgroundWidth"": 0.1,
+        ""Font"": ""Arial Bold"",
+        ""Size"": 32
     },
     ""Translations"": {
         ""NextButton"": ""Next"",
@@ -196,13 +196,13 @@ namespace CS2ScreenMenuAPI.Config
         public MenuType MenuType { get; set; } = MenuType.Both;
 
         [JsonConverter(typeof(ColorJsonConverter))]
-        public Color TextColor { get; set; } = Color.DarkOrange;
+        public Color TextColor { get; set; } = Color.Orange;
         public float PositionX { get; set; } = -5.5f;
-        public float PositionY { get; set; } = 2.8f;
+        public float PositionY { get; set; } = 0f;
         public bool Background { get; set; } = true;
-        public float BackgroundHeight { get; set; } = 0.2f;
-        public float BackgroundWidth { get; set; } = 0.15f;
-        public string Font { get; set; } = "Verdana Bold";
-        public float Size { get; set; } = 35;
+        public float BackgroundHeight { get; set; } = 0.1f;
+        public float BackgroundWidth { get; set; } = 0.1f;
+        public string Font { get; set; } = "Arial Bold";
+        public float Size { get; set; } = 32;
     }
 }
