@@ -89,10 +89,11 @@ namespace CS2ScreenMenuAPI.Config
         ""PositionX"": -5.5,
         ""PositionY"": 0,
         ""Background"": true,
-        ""BackgroundHeight"": 0.1,
-        ""BackgroundWidth"": 0.1,
+        ""BackgroundHeight"": 0,
+        ""BackgroundWidth"": 0.2,
         ""Font"": ""Arial Bold"",
-        ""Size"": 32
+        ""Size"": 32,
+        ""Spacing"": true,
     },
     ""Translations"": {
         ""NextButton"": ""Next"",
@@ -194,9 +195,10 @@ namespace CS2ScreenMenuAPI.Config
         public float PositionX { get; set; } = -5.5f;
         public float PositionY { get; set; } = 0f;
         public bool Background { get; set; } = true;
-        public float BackgroundHeight { get; set; } = 0.1f;
-        public float BackgroundWidth { get; set; } = 0.1f;
+        public float BackgroundHeight { get; set; } = 0f;
+        public float BackgroundWidth { get; set; } = 0.2f;
         public string Font { get; set; } = "Arial Bold";
         public float Size { get; set; } = 32;
+        public bool Spacing { get; set; } = true;
     }
 }

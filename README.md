@@ -16,10 +16,11 @@
         "PositionX": -5.5,
         "PositionY": 0,
         "Background" true,
-        "BackgroundHeight" 0.1,
-        "BackgroundWidth" 0.1,
+        "BackgroundHeight" 0,
+        "BackgroundWidth" 0.2,
         "Font": "Arial Bold",
-        "Size": 32
+        "Size": 32,
+        "Spacing": true
     },
     "Translations": {
         "NextButton": "Next",

@@ -259,6 +259,9 @@ namespace CS2ScreenMenuAPI.Internal
             int currentOffset = CurrentPage * NUM_PER_PAGE;
             int selectable = Math.Min(NUM_PER_PAGE, _menu.MenuOptions.Count - currentOffset);
 
+            if (_config.DefaultSettings.Spacing)
+                builder.AppendLine("\u200B");
+
             builder.AppendLine(_menu.Title);
             builder.AppendLine("\u200B");
 
@@ -274,6 +277,9 @@ namespace CS2ScreenMenuAPI.Internal
                 builder.AppendLine(_config.Translations.ScrollInfo);
                 builder.AppendLine(_config.Translations.SelectInfo);
             }
+
+            if (_config.DefaultSettings.Spacing)
+                builder.AppendLine("\u200B");
         }
 
         private void BuildOptionsList(StringBuilder builder, int currentOffset, int selectable)
