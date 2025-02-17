@@ -19,6 +19,9 @@
         "TextColor": "DarkOrange",
         "MenuPositionX": -5.5,
         "MenuPositionY": 2.8,
+        "MenuBackground" true,
+        "MenuBackgroundHeight" 0.2,
+        "MenuBackgroundWidth" 0.15,
         "MenuFont": "Verdana Bold"
     },
     "Translations": {

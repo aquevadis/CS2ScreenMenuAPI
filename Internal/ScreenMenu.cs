@@ -39,6 +39,21 @@ namespace CS2ScreenMenuAPI
             get => _config.DefaultSettings.MenuPositionY;
             set => _config.DefaultSettings.MenuPositionY = value;
         }
+        public bool MenuBackground
+        {
+            get => _config.DefaultSettings.MenuBackground;
+            set => _config.DefaultSettings.MenuBackground = value;
+        }
+        public float MenuBackgroundHeight
+        {
+            get => _config.DefaultSettings.MenuBackgroundHeight;
+            set => _config.DefaultSettings.MenuBackgroundHeight = value;
+        }
+        public float MenuBackgroundWidth
+        {
+            get => _config.DefaultSettings.MenuBackgroundWidth;
+            set => _config.DefaultSettings.MenuBackgroundWidth = value;
+        }
 
         public ScreenMenu(string title, BasePlugin plugin) : base(title)
         {

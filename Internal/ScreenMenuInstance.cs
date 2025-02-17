@@ -242,7 +242,9 @@ namespace CS2ScreenMenuAPI.Internal
                     _menu.FontName,
                     _menu.MenuPositionX,
                     _menu.MenuPositionY,
-                    true,
+                    _menu.MenuBackground,
+                    _menu.MenuBackgroundHeight,
+                    _menu.MenuBackgroundWidth,
                     true
                 );
             }

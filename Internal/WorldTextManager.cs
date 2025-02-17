@@ -22,6 +22,8 @@ namespace CS2ScreenMenuAPI.Internal
             float shiftX = 0f,
             float shiftY = 0f,
             bool drawBackground = false,
+            float backgroundHeight = 0.2f,
+            float backgroundWidth = 0.15f,
             bool isMenu = true)
         {
             CCSPlayerPawn pawn = player.PlayerPawn.Value!;
@@ -55,8 +57,8 @@ namespace CS2ScreenMenuAPI.Internal
                 worldText.DrawBackground = true;
                 if (isMenu)
                 {
-                    worldText.BackgroundBorderHeight = 0.2f;
-                    worldText.BackgroundBorderWidth = 0.15f;
+                    worldText.BackgroundBorderHeight = backgroundHeight;
+                    worldText.BackgroundBorderWidth = backgroundWidth;
                 }
             }
 

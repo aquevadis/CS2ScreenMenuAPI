@@ -94,6 +94,9 @@ namespace CS2ScreenMenuAPI.Config
         ""TextColor"": ""DarkOrange"",
         ""MenuPositionX"": -5.5,
         ""MenuPositionY"": 2.8,
+        ""MenuBackground"": true,
+        ""MenuBackgroundHeight"": 0.2,
+        ""MenuBackgroundWidth"": 0.15,
         ""MenuFont"": ""Verdana Bold""
     },
     ""Translations"": {
@@ -195,6 +198,9 @@ namespace CS2ScreenMenuAPI.Config
         public Color TextColor { get; set; } = Color.DarkOrange;
         public float MenuPositionX { get; set; } = -5.5f;
         public float MenuPositionY { get; set; } = 2.8f;
+        public bool MenuBackground { get; set; } = true;
+        public float MenuBackgroundHeight { get; set; } = 0.2f;
+        public float MenuBackgroundWidth { get; set; } = 0.15f;
         public string MenuFont { get; set; } = "Verdana Bold";
     }
 }
