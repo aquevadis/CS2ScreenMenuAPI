@@ -17,7 +17,7 @@ namespace CS2ScreenMenuAPI
 
             CCSPlayer.InitializePlayerWorldText(player);
 
-            plugin.AddTimer(1.0f, () =>
+            plugin.AddTimer(0.1f, () =>
             {
                 ActiveMenus[player.Handle] = new ScreenMenuInstance(plugin, player, menu);
                 ActiveMenus[player.Handle].Display();
