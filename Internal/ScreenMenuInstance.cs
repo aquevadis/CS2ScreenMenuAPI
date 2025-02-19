@@ -388,6 +388,19 @@ namespace CS2ScreenMenuAPI.Internal
                     if (!option.Disabled)
                     {
                         option.OnSelect(_player, option);
+                        switch (_menu.PostSelectAction)
+                        {
+                            case PostSelectAction.Close:
+                                Close();
+                                break;
+                            case PostSelectAction.Reset:
+                                Reset();
+                                break;
+                            case PostSelectAction.Nothing:
+                                break;
+                            default:
+                                throw new NotImplementedException("The specified Select Action is not supported!");
+                        }
                     }
                 }
             }
@@ -396,6 +409,7 @@ namespace CS2ScreenMenuAPI.Internal
                 HandleNavigationSelection(selectable);
             }
         }
+
 
         private void HandleNavigationSelection(int selectable)
         {
@@ -463,7 +477,7 @@ namespace CS2ScreenMenuAPI.Internal
             }
             else
             {
-                if (navIndex == 0) 
+                if (navIndex == 0)
                 {
                     int newPage = CurrentPage - 1;
                     int newSelectable = Math.Min(NUM_PER_PAGE, _menu.MenuOptions.Count - (newPage * NUM_PER_PAGE));
