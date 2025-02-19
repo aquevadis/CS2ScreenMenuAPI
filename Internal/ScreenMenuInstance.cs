@@ -1,12 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Reflection;
+﻿using System.Text;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
 using CS2ScreenMenuAPI.Enums;
 using CS2ScreenMenuAPI.Config;
-using System.Drawing;
+using CS2ScreenMenuAPI.Interfaces;
 
 namespace CS2ScreenMenuAPI.Internal
 {
@@ -24,7 +21,6 @@ namespace CS2ScreenMenuAPI.Internal
         private readonly MenuConfig _config;
         private bool _useHandled = false;
         private bool _menuJustOpened = true;
-        private int _ticksSinceOpen = 0;
 
         private readonly Listeners.OnTick _onTickDelegate;
         private readonly Listeners.CheckTransmit _checkTransmitDelegate;
@@ -46,12 +42,12 @@ namespace CS2ScreenMenuAPI.Internal
             _oldButtons = player.Buttons;
             _useHandled = true;
             _menuJustOpened = true;
-            _ticksSinceOpen = 0;
 
             _onTickDelegate = new Listeners.OnTick(Update);
             _checkTransmitDelegate = new Listeners.CheckTransmit(CheckTransmitListener);
             _onEntityDeletedDelegate = new Listeners.OnEntityDeleted(OnEntityDeleted);
             _onRoundStartDelegate = new BasePlugin.GameEventHandler<EventRoundStart>(OnRoundStart);
+
             RegisterOnKeyPress();
             RegisterListeners();
         }
@@ -69,10 +65,7 @@ namespace CS2ScreenMenuAPI.Internal
                             return;
 
                         var menu = MenuAPI.GetActiveMenu(player);
-                        if (menu != null)
-                        {
-                            menu.OnKeyPress(player, key);
-                        }
+                        menu?.OnKeyPress(player, key);
                     });
                 }
                 _keyCommandsRegistered = true;
@@ -100,7 +93,7 @@ namespace CS2ScreenMenuAPI.Internal
         {
             foreach ((CCheckTransmitInfo info, CCSPlayerController? client) in infoList)
             {
-                if (client is null || !client.IsValid)
+                if (!CCSPlayer.IsValidPlayer(client))
                     continue;
 
                 foreach (var kvp in WorldTextManager.WorldTextOwners)
@@ -108,7 +101,7 @@ namespace CS2ScreenMenuAPI.Internal
                     uint worldTextIndex = kvp.Key;
                     CCSPlayerController owner = kvp.Value;
 
-                    if (client.Slot != owner.Slot)
+                    if (client?.Slot != owner.Slot)
                     {
                         info.TransmitEntities.Remove((int)worldTextIndex);
                     }
@@ -127,7 +120,7 @@ namespace CS2ScreenMenuAPI.Internal
 
         private void Update()
         {
-            if (_player == null || !_player.IsValid)
+            if (!CCSPlayer.IsValidPlayer(_player))
             {
                 Close();
                 return;
@@ -137,13 +130,6 @@ namespace CS2ScreenMenuAPI.Internal
                 return;
 
             var currentButtons = _player.Buttons;
-            _ticksSinceOpen++;
-
-            if (_ticksSinceOpen < 3)
-            {
-                if (_hudText == null || !_hudText.IsValid)
-                    Display();
-            }
 
             if (_menuJustOpened)
             {
@@ -226,9 +212,7 @@ namespace CS2ScreenMenuAPI.Internal
         public void Display()
         {
             var builder = new StringBuilder();
-
             BuildMenuText(builder);
-
             string menuText = builder.ToString();
 
             if (_hudText == null)
@@ -530,8 +514,6 @@ namespace CS2ScreenMenuAPI.Internal
             }
         }
 
-
-
         public void OnKeyPress(CCSPlayerController player, int key)
         {
             if (_menu.MenuType == MenuType.Scrollable)
@@ -623,6 +605,7 @@ namespace CS2ScreenMenuAPI.Internal
                 _hudText.AcceptInput("Kill", _hudText);
                 WorldTextManager.WorldTextOwners.Clear();
             }
+
             MenuAPI.RemoveActiveMenu(_player);
             UnregisterListeners();
         }

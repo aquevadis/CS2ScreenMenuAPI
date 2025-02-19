@@ -7,6 +7,11 @@ namespace CS2ScreenMenuAPI.Internal
 {
     public static class CCSPlayer
     {
+        public static bool IsValidPlayer(CCSPlayerController? p)
+        {
+            return p != null && p.IsValid && !p.IsBot && !p.IsHLTV && p.Connected == PlayerConnectedState.PlayerConnected;
+        }
+
         public static CCSPlayerPawn? GetPlayerPawn(this CCSPlayerController player)
         {
             return player.PlayerPawn.Value;
@@ -15,6 +20,14 @@ namespace CS2ScreenMenuAPI.Internal
         {
             return player.GetPlayerPawn() as CCSPlayerPawnBase;
         }
+
+        public static void InitializePlayerWorldText(CCSPlayerController player)
+        {
+            if (player == null) return;
+
+            WorldTextManager.Create(player, "");
+        }
+
         public static CCSGOViewModel? EnsureCustomView(this CCSPlayerController player, int index)
         {
             CCSPlayerPawnBase? pPawnBase = player.GetPlayerPawnBase();

@@ -3,7 +3,7 @@ using CounterStrikeSharp.API.Core;
 using CS2ScreenMenuAPI.Config;
 using CS2ScreenMenuAPI.Enums;
 
-namespace CS2ScreenMenuAPI
+namespace CS2ScreenMenuAPI.Internal
 {
     public class ScreenMenu : BaseMenu
     {

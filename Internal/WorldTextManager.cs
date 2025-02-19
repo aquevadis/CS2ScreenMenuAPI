@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using CounterStrikeSharp.API;
 using CounterStrikeSharp.API.Core;
-using CounterStrikeSharp.API.Modules.Entities;
-using CounterStrikeSharp.API.Modules.Memory;
 using CounterStrikeSharp.API.Modules.Utils;
 
 namespace CS2ScreenMenuAPI.Internal
 {
     internal static class WorldTextManager
     {
-        internal static Dictionary<uint, CCSPlayerController> WorldTextOwners = new();
+        internal static Dictionary<uint, CCSPlayerController> WorldTextOwners = [];
 
         internal static CPointWorldText? Create(
             CCSPlayerController player,
@@ -75,6 +71,7 @@ namespace CS2ScreenMenuAPI.Internal
 
             worldText.DispatchSpawn();
             worldText.Teleport(pawn.AbsOrigin! + offset + new Vector(0, 0, pawn.ViewOffset.Z), angles, null);
+
             worldText.AcceptInput("SetParent", viewmodel, null, "!activator");
 
             WorldTextOwners[worldText.Index] = player;

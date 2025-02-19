@@ -1,6 +1,6 @@
 ﻿using CounterStrikeSharp.API.Core;
 
-namespace CS2ScreenMenuAPI
+namespace CS2ScreenMenuAPI.Interfaces
 {
     public interface IMenuInstance
     {
