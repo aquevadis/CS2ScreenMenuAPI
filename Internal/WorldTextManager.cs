@@ -32,8 +32,19 @@ namespace CS2ScreenMenuAPI.Internal
                 return null;
             }
 
-            // Use the player's pawn for positioning.
-            CCSPlayerPawn pawn = player.PlayerPawn.Value!;
+            var pawn = player.Pawn?.Value!;
+            QAngle eyeAng;
+
+            if (pawn.LifeState is (byte)LifeState_t.LIFE_DEAD) {
+
+                pawn = pawn.GetObservingPlayerOfPlayer()!;
+                if (pawn is null) return null;
+
+                eyeAng = pawn.As<CCSPlayerPawn>().EyeAngles;
+            }
+            else {
+                 eyeAng = pawn.As<CCSPlayerPawn>().EyeAngles;
+            }
 
             CPointWorldText worldText = Utilities.CreateEntityByName<CPointWorldText>("point_worldtext")!;
             worldText.MessageText = text;
@@ -54,7 +65,7 @@ namespace CS2ScreenMenuAPI.Internal
                 worldText.BackgroundBorderWidth = backgroundWidth;
             }
 
-            QAngle eyeAngles = pawn.EyeAngles;
+            QAngle eyeAngles = eyeAng;
             Vector forward = new(), right = new(), up = new();
             NativeAPI.AngleVectors(eyeAngles.Handle, forward.Handle, right.Handle, up.Handle);
 

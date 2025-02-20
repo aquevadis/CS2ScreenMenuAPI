@@ -25,6 +25,8 @@ namespace CS2ScreenMenuAPI.Internal
         {
             if (player == null) return;
 
+            
+
             WorldTextManager.Create(player, "");
         }
 
@@ -138,5 +140,33 @@ namespace CS2ScreenMenuAPI.Internal
 
             return handle.Value;
         }
+    
+        /// <summary>
+        /// Get the observing player of another player
+        /// </summary>
+        /// <param name="playerPawn">The playerPawn that is being observed</param>
+        /// <returns>The playerPawn that is currently spectating the player</returns>
+        public static CBasePlayerPawn? GetObservingPlayerOfPlayer(this CBasePlayerPawn playerPawn)
+        {
+            if (playerPawn is null || playerPawn.IsValid is not true) return null;
+
+            var observerServices = playerPawn?.ObserverServices;
+            if (observerServices is null) return null;
+
+            var observerPawn = observerServices.ObserverTarget?.Value?.As<CCSPlayerPawn>();
+            if (observerPawn is null || observerPawn.IsValid is not true) return null;
+
+            var observerController = observerPawn.OriginalController.Value;
+            if (observerController is null || observerController.IsValid is not true) return null;
+
+            var observerPlayer = Utilities.GetPlayerFromIndex((int)observerController.Index - 1);
+            if (observerPlayer is null || observerPlayer.IsValid is not true) return null;
+
+            var observerPlayerPawn = observerPlayer.PlayerPawn.Value;
+
+            return observerPlayerPawn;
+        }
+        
+
     }
 }
