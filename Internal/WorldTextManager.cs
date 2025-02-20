@@ -32,15 +32,30 @@ namespace CS2ScreenMenuAPI.Internal
                 return null;
             }
 
-            var pawn = player.Pawn?.Value!;
+            var pawn = player.PlayerPawn?.Value!;
             QAngle eyeAng;
 
             if (pawn.LifeState is (byte)LifeState_t.LIFE_DEAD) {
 
-                pawn = pawn.GetObservingPlayerOfPlayer()!;
-                if (pawn is null) return null;
+                pawn = (CCSPlayerPawn)pawn.As<CBasePlayerPawn>();
 
-                eyeAng = pawn.As<CCSPlayerPawn>().EyeAngles;
+                var observerServices = pawn?.ObserverServices;
+                if (observerServices is null) return null;
+
+                var observerPawn = observerServices.ObserverTarget?.Value?.As<CCSPlayerPawn>();
+                if (observerPawn is null || observerPawn.IsValid is not true) return null;
+
+                var observerController = observerPawn.OriginalController.Value;
+                if (observerController is null || observerController.IsValid is not true) return null;
+
+                var observerPlayer = Utilities.GetPlayerFromIndex((int)observerController.Index - 1);
+                if (observerPlayer is null || observerPlayer.IsValid is not true) return null;
+
+                var observerPlayerPawn = observerPlayer.PlayerPawn.Value;
+                
+                eyeAng = observerPlayerPawn?.EyeAngles!;
+                pawn = observerPlayerPawn;
+
             }
             else {
                  eyeAng = pawn.As<CCSPlayerPawn>().EyeAngles;
